@@ -14,6 +14,7 @@ public class PlatformController : MonoBehaviour
     public GameObject player;
     public bool isOnPlatform = false;
     public bool wasOnPlatform = false;
+    private Vector3 keepScale = new Vector3(1.0f, 1.0f, 1.0f);
 
     public enum MovementType
     {
@@ -47,18 +48,19 @@ public class PlatformController : MonoBehaviour
                 break;
         }
 
-        if (isOnPlatform && !wasOnPlatform)
+        if (isOnPlatform)
         {
             player.transform.SetParent(this.transform);
+            player.transform.localScale = keepScale;
             Debug.Log("Player is child");
         }
 
-        if (!isOnPlatform && wasOnPlatform)
+        if (!isOnPlatform)
         {
             player.transform.SetParent(null);
         }
 
-        wasOnPlatform = isOnPlatform;
+        player.transform.localScale = keepScale;
     }
 
     private void MoveUpDown()

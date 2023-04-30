@@ -106,6 +106,13 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] int health;
     public bool invincible = false;
 
+    //Ground check
+    [Header("---Ground Check---")]
+    private bool isGrounded;
+    [SerializeField] private float groundedSphereRadius = 0.2f;
+    [SerializeField] private Vector3 groundOffset;
+    [SerializeField] private LayerMask groundLayer;
+
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
@@ -138,7 +145,7 @@ public class PlayerControls : MonoBehaviour
 
     private void DoJump(InputAction.CallbackContext obj)
     {
-        if(IsGrounded())
+        if(isGrounded)
         {
             jumpDirection = jumpForce;
         }
@@ -176,6 +183,17 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    public void CheckIsGrounded()
+    {
+        isGrounded = Physics.CheckSphere(transform.TransformPoint(groundOffset), groundedSphereRadius, groundLayer);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        Gizmos.DrawSphere(transform.TransformPoint(groundOffset), groundedSphereRadius);
+    }
+
     private void LookAt()
     {
         Vector3 direction = rb.velocity;
@@ -203,7 +221,19 @@ public class PlayerControls : MonoBehaviour
     private void FixedUpdate()
     {
         //Movement
-        IsGrounded();
+        //IsGrounded();
+        CheckIsGrounded();
+
+        if (isGrounded)
+        {
+            jumping = false;
+            doubleJumping = false;
+            jumpsLeft = extraJumps;
+        }
+        else
+        {
+            jumping = true;
+        }
 
         //new movement
         Vector2 horizontalVelo;
@@ -242,6 +272,7 @@ public class PlayerControls : MonoBehaviour
         }
 
         LookAt();
+        Debug.Log(isGrounded);
     }
 
     private Vector3 GetCameraForward(Camera playerCam)
