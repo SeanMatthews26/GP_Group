@@ -105,6 +105,9 @@ public class PlayerControls : MonoBehaviour
     [Header("---Health/Damage---")]
     [SerializeField] int health;
     public bool invincible = false;
+    
+    // block input
+    public bool inputBlocked;
 
     private void Awake()
     {
@@ -155,7 +158,7 @@ public class PlayerControls : MonoBehaviour
 
     private void DoInteract(InputAction.CallbackContext obj)
     {
-
+        
     }
 
     private bool IsGrounded()
