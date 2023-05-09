@@ -336,7 +336,7 @@ public class PlayerControls : MonoBehaviour
                 var x = Quaternion.LookRotation(currentTarget.transform.position - playerCam.transform.position);
                 playerCam.transform.rotation = Quaternion.Slerp(playerCam.transform.rotation, x, 10 * Time.deltaTime);
 
-                LoseTarget();
+                //LoseTarget();
                 LockOnTarget();
             }
             else
