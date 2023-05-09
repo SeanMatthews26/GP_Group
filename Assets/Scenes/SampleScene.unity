@@ -1861,6 +1861,7 @@ MonoBehaviour:
   currentPlat: {fileID: 0}
   health: 0
   invincible: 0
+  inputBlocked: 0
 --- !u!114 &1753087162
 MonoBehaviour:
   m_ObjectHideFlags: 0
