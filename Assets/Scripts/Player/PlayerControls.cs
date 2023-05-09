@@ -29,7 +29,6 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] public float maxSpeed;
     [SerializeField] private float extraGravity = 1.5f;
     [SerializeField] private float maxFallSpeed;
-    [HideInInspector] public bool speedBoosted;
     [SerializeField] float boostedMaxSpeed;
 
     //Attack
@@ -105,6 +104,12 @@ public class PlayerControls : MonoBehaviour
     [Header("---Health/Damage---")]
     [SerializeField] int health;
     public bool invincible = false;
+
+    //Power Ups
+    private bool jumpBoosted = false;
+    private float doubleJumpTimer = 0f;
+    private bool speedBoosted = false;
+    private float speedBoostTimer = 0f;
 
     private void Awake()
     {
@@ -506,5 +511,63 @@ public class PlayerControls : MonoBehaviour
     void ResetInvincible()
     {
         invincible = false;
+    }
+
+    public void ReceivePowerUp(PowerUpType powerUpType, float powerUpDuration)
+    {
+        switch (powerUpType)
+        {
+            case PowerUpType.doubleJump:
+                jumpBoosted = true;
+                doubleJumpTimer = powerUpDuration;
+
+                ++extraJumps;
+                break;
+
+            case PowerUpType.speedBoost:
+                speedBoosted = true;
+                speedBoostTimer = powerUpDuration;
+
+                boostedMaxSpeed = maxSpeed * 2;
+                break;
+        }
+    }
+
+    private void PowerUpCountdown()
+    {
+        //-Double jump-
+        if (jumpBoosted)
+        {
+            //Reduce timer
+            if (doubleJumpTimer > 0)
+            {
+                doubleJumpTimer -= Time.deltaTime;
+            }
+            //Disable double jump
+            else
+            {
+                doubleJumpTimer = 0;
+                jumpBoosted = false;
+
+                --extraJumps;
+            }
+        }
+        //-Speed boost-
+        if (speedBoosted)
+        {
+            //Reduce timer
+            if (speedBoostTimer > 0)
+            {
+                speedBoostTimer -= Time.deltaTime;
+            }
+            //Disable double jump
+            else
+            {
+                speedBoostTimer = 0;
+                speedBoosted = false;
+
+                boostedMaxSpeed = maxSpeed / 2;
+            }
+        }
     }
 }
