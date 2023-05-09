@@ -792,6 +792,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6796439526538795007, guid: b95a45fd70886e64294baa66738986ff, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 6796439527013915015, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -1104,54 +1108,6 @@ MonoBehaviour:
   player: {fileID: 0}
   isOnPlatform: 0
   wasOnPlatform: 0
---- !u!1 &1033575513 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1973604498100667587, guid: c53aeb216b5eb0c4a82f3a57df14fbb7, type: 3}
-  m_PrefabInstance: {fileID: 1067245395}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1033575518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1033575513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 384b499651dc30a4ea96f21a04b337b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1047733214
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1047733215}
-  m_Layer: 0
-  m_Name: MapController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1047733215
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047733214}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.982994, y: -6.41168, z: -1.2568178}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1067245395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1578,9 +1534,6 @@ MonoBehaviour:
   speed: 2
   distance: 2
   movementType: 0
-  player: {fileID: 1753087149}
-  isOnPlatform: 0
-  wasOnPlatform: 0
 --- !u!1 &1753087149 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6796439526535804059, guid: b95a45fd70886e64294baa66738986ff, type: 3}
@@ -1647,7 +1600,7 @@ MonoBehaviour:
   interactSphereRad: 3
   onPlatform: 0
   currentPlat: {fileID: 0}
-  health: 3
+  health: 0
   invincible: 0
 --- !u!114 &1753087162
 MonoBehaviour:
