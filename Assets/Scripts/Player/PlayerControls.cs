@@ -538,4 +538,9 @@ public class PlayerControls : MonoBehaviour
     {
         invincible = false;
     }
+
+    void HandSwordAttack()
+    {
+
+    }
 }
