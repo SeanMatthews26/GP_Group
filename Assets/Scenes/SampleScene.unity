@@ -442,6 +442,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6796439526538795007, guid: b95a45fd70886e64294baa66738986ff, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 6796439527013915015, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -750,6 +754,9 @@ MonoBehaviour:
   speed: 2
   distance: 2
   movementType: 1
+  player: {fileID: 0}
+  isOnPlatform: 0
+  wasOnPlatform: 0
 --- !u!1001 &1067245395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1071,6 +1078,9 @@ MonoBehaviour:
   speed: 2
   distance: 2
   movementType: 0
+  player: {fileID: 0}
+  isOnPlatform: 0
+  wasOnPlatform: 0
 --- !u!1 &1753087149 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6796439526535804059, guid: b95a45fd70886e64294baa66738986ff, type: 3}
@@ -1137,7 +1147,7 @@ MonoBehaviour:
   interactSphereRad: 3
   onPlatform: 0
   currentPlat: {fileID: 0}
-  health: 3
+  health: 0
   invincible: 0
 --- !u!114 &1753087162
 MonoBehaviour:
