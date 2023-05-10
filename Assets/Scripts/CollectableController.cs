@@ -13,25 +13,11 @@ public enum CollectableType
 public class CollectableController : MonoBehaviour
 {
     public CollectableType collectableType = new CollectableType();
-    public float powerUpDuration = 10.0f;
+    public float powerUpDuration = 2.0f;
 
     void Start()
     {
-        mesh = GetComponent<Mesh>();
 
-        //Check power up to use
-        switch (collectableType)
-        {
-            case CollectableType.coin:
-                this.GetComponent<MeshRenderer>().material.color = Color.yellow;
-                break;
-            case CollectableType.doubleJump:
-                this.GetComponent<MeshRenderer>().material.color = Color.green;
-                break;
-            case CollectableType.speedBoost:
-                this.GetComponent<MeshRenderer>().material.color = Color.blue;
-                break;
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,10 +30,18 @@ public class CollectableController : MonoBehaviour
 
             //Pass power up type into PlayerControls
             other.GetComponent<PlayerControls>().ReceiveCollectable(collectableType, powerUpDuration);
+            other.GetComponent<PlayerControls>().EndPower(collectableType, powerUpDuration);
 
             //Disable powerup
-            this.GetComponent<BoxCollider>().enabled = false;
-            this.GetComponent<MeshRenderer>().enabled = false;
+            //this.GetComponent<BoxCollider>().enabled = false;
+            //this.GetComponent<MeshRenderer>().enabled = false;
+
+            Invoke(nameof(Reset),powerUpDuration);
         }
+    }
+
+    public void Reset()
+    {
+        gameObject.active = true;
     }
 }
