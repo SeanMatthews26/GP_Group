@@ -117,6 +117,14 @@ public class PlayerControls : MonoBehaviour
 
     // block input
     public bool inputBlocked;
+    
+    // game controller
+    private GameObject _gameController;
+    
+    // spline
+    private GameObject _splineController;
+    private GameObject _splineAnchor;
+    private GameObject _splineCameraAnchor;
 
     //Collectables
     private int coins = 0;
@@ -243,46 +251,75 @@ public class PlayerControls : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Movement
-        IsGrounded();
-
-        //new movement
-        Vector2 horizontalVelo;
-        horizontalVelo = Vector2.ClampMagnitude(new Vector2(forceDirection.x, forceDirection.z), maxSpeed);
-        rb.velocity = new Vector3(horizontalVelo.x, rb.velocity.y, horizontalVelo.y);
-
-        //old movement
-        //rb.velocity = Vector3.ClampMagnitude(rb.velocity + forceDirection, maxSpeed); 
-
-        rb.velocity += jumpDirection * Vector3.up;
-
-        //Update current platform velocity
-        if (currentPlat != null)
+        if (!_gameController.GetComponent<GameControllerScript>().splineMode) // normal mode
         {
-            currentPlatVelo = currentPlat.GetComponent<Rigidbody>().velocity;
-        }
+            //Movement
+            IsGrounded();
 
-        if (!onPlatform)
+            //new movement
+            Vector2 horizontalVelo;
+            horizontalVelo = Vector2.ClampMagnitude(new Vector2(forceDirection.x, forceDirection.z), maxSpeed);
+            rb.velocity = new Vector3(horizontalVelo.x, rb.velocity.y, horizontalVelo.y);
+
+            //old movement
+            //rb.velocity = Vector3.ClampMagnitude(rb.velocity + forceDirection, maxSpeed); 
+
+            rb.velocity += jumpDirection * Vector3.up;
+
+            //Update current platform velocity
+            if (currentPlat != null)
+            {
+                currentPlatVelo = currentPlat.GetComponent<Rigidbody>().velocity;
+            }
+
+            if (!onPlatform)
+            {
+                rb.drag = normalDrag;
+            }
+            else
+            {
+                rb.velocity += currentPlatVelo;
+                rb.drag = onPlatDrag;
+            }
+
+            forceDirection = Vector3.zero;
+            jumpDirection = 0;
+
+            //Extra Gravity
+            if(rb.velocity.y < -0.1)
+            {
+                //rb.velocity -= Vector3.down * Physics.gravity.y * Time.fixedDeltaTime * extraGravity;
+                rb.velocity += Vector3.down * extraGravity;
+            }
+
+            LookAt();
+        }
+        
+        else // spline mode
         {
-            rb.drag = normalDrag;
-        }
-        else
-        {
-            rb.velocity += currentPlatVelo;
-            rb.drag = onPlatDrag;
-        }
+            // spline movement
+            Vector3 moveDirection;
+            moveDirection = transform.forward * move.ReadValue<Vector2>().x;
+            moveDirection.Normalize();
+            moveDirection.y = 0;
 
-        forceDirection = Vector3.zero;
-        jumpDirection = 0;
-
-        //Extra Gravity
-        if(rb.velocity.y < -0.1)
-        {
-            //rb.velocity -= Vector3.down * Physics.gravity.y * Time.fixedDeltaTime * extraGravity;
-            rb.velocity += Vector3.down * extraGravity;
+            if (_splineController.GetComponent<SplineScript>()._splineRunning)
+            {
+                _splineController.GetComponent<SplineScript>().time = _splineController.GetComponent<SplineScript>()
+                    .GetNearestSplineTime(transform.position);
+            }
+            
+            // spline rotation
+            Vector3 splineDirection = _splineAnchor.transform.forward;
+            splineDirection.y = 0f;
+            Quaternion targetRotation = Quaternion.LookRotation(splineDirection, Vector3.up);
+            Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, 1);
+            transform.rotation = playerRotation;
+            
+            // move player
+            Vector3 movementVelocity = moveDirection * movementSpeed * 3.676f;
+            transform.Translate(movementVelocity * Time.deltaTime, Space.World);
         }
-
-        LookAt();
     }
 
     private Vector3 GetCameraForward(Camera playerCam)
@@ -369,20 +406,22 @@ public class PlayerControls : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(camEnabled)
+        if (!_gameController.GetComponent<GameControllerScript>().splineMode) // normal camera
         {
-            //Camera Stuff
-            if (lockedOn)
+            if(camEnabled)
             {
-                offset2D = transform.position - currentTarget.transform.position;
-                offsetNorm = offset2D.normalized;
+                //Camera Stuff
+                if (lockedOn)
+                {
+                    offset2D = transform.position - currentTarget.transform.position;
+                    offsetNorm = offset2D.normalized;
 
-                targetImage.enabled = true;
-                lockOnCamPos = new Vector3(transform.position.x + (offsetNorm.x * dstToCam2D), playerCam.transform.position.y, transform.position.z + (offsetNorm.z * dstToCam2D));
-                playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, lockOnCamPos, camSwitchSpeed * Time.deltaTime);
+                    targetImage.enabled = true;
+                    lockOnCamPos = new Vector3(transform.position.x + (offsetNorm.x * dstToCam2D), playerCam.transform.position.y, transform.position.z + (offsetNorm.z * dstToCam2D));
+                    playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, lockOnCamPos, camSwitchSpeed * Time.deltaTime);
 
-                var x = Quaternion.LookRotation(currentTarget.transform.position - playerCam.transform.position);
-                playerCam.transform.rotation = Quaternion.Slerp(playerCam.transform.rotation, x, 10 * Time.deltaTime);
+                    var x = Quaternion.LookRotation(currentTarget.transform.position - playerCam.transform.position);
+                    playerCam.transform.rotation = Quaternion.Slerp(playerCam.transform.rotation, x, 10 * Time.deltaTime);
 
                 //LoseTarget();
                 LockOnTarget();
@@ -395,21 +434,27 @@ public class PlayerControls : MonoBehaviour
                 pitch = Mathf.Clamp(pitch, pitchLimits.x, pitchLimits.y);
               
 
-                Vector3 targetRotation = new Vector3(pitch, yaw);
-                playerCam.transform.eulerAngles = targetRotation;
+                    Vector3 targetRotation = new Vector3(pitch, yaw);
+                    playerCam.transform.eulerAngles = targetRotation;
 
-                freeCamPos = transform.position - (playerCam.transform.forward * dstToCam2D) + camTargetAbovePlayer;
+                    freeCamPos = transform.position - (playerCam.transform.forward * dstToCam2D) + camTargetAbovePlayer;
 
-                camVector = freeCamPos - transform.position;
-                camDir = camVector.normalized;
-                camDistance = camVector.magnitude;
+                    camVector = freeCamPos - transform.position;
+                    camDir = camVector.normalized;
+                    camDistance = camVector.magnitude;
 
-                //playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, freeCamPos, camSwitchSpeed * Time.deltaTime);
-                playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, transform.position + (camDir * camDistance), camSwitchSpeed * Time.deltaTime);
-                
-                
-                CamOcclusion();
+                    //playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, freeCamPos, camSwitchSpeed * Time.deltaTime);
+                    playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, transform.position + (camDir * camDistance), camSwitchSpeed * Time.deltaTime);
+                    
+                    
+                    CamOcclusion();
+                }
             }
+        }
+        else // spline camera
+        {
+            playerCam.transform.position = _splineCameraAnchor.transform.position;
+            playerCam.transform.LookAt(transform);
         }
     }
 
