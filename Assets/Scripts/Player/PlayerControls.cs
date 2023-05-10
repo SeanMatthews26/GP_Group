@@ -110,7 +110,7 @@ public class PlayerControls : MonoBehaviour
     private float health;
     public bool invincible = false;
     [SerializeField] Image healthBar;
-    Vector3 startingPos;
+    public Vector3 startingPos;
 
     //Particles
     [Header("---Particles---")]
@@ -145,6 +145,7 @@ public class PlayerControls : MonoBehaviour
         cameraDirection = transform.localPosition.normalized;
         cameraDistanceMinMax = new Vector2(0.5f, 12);
 
+        startingPos = transform.position;
     }
 
     private void OnEnable()
