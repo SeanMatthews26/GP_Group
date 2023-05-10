@@ -530,10 +530,10 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damage)
     {
         invincible = true;
-        health--;
+        health-= damage;
         Invoke(nameof(ResetInvincible), 2f);
         CheckHealth();
         UpdateHealthbar();
