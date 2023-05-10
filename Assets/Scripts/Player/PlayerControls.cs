@@ -177,26 +177,13 @@ public class PlayerControls : MonoBehaviour
 
     private void DoInteract(InputAction.CallbackContext obj)
     {
-        if (!interacting)
-        {
-            bool switchInArea = false;
-            Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * interactSphereOffset, interactSphereRad);
+        interacting = true;
+        Invoke(nameof(ResetInteract), 1f);
+    }
 
-            foreach (Collider hit in hits)
-            {
-                if (hit.tag == "Switch")
-                {
-                    switchInArea = true;
-                    //hit.GetComponent<DoorSwitch>().Switch();
-                }
-            }
-
-            if (switchInArea)
-            {
-                interactPressed = true;
-                interacting = true;
-            }
-        }
+    private void ResetInteract()
+    {
+        interacting = false;
     }
 
     private bool IsGrounded()
