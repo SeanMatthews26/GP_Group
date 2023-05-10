@@ -10,6 +10,7 @@ public class SplineColliderScript : MonoBehaviour
         {
             transform.GetComponentInParent<SplineScript>()._splineRunning =
                 !transform.GetComponentInParent<SplineScript>()._splineRunning;
+            Debug.Log("colliding");
         }
     }
 }
