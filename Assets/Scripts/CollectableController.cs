@@ -14,6 +14,7 @@ public class CollectableController : MonoBehaviour
 {
     public CollectableType collectableType = new CollectableType();
     public float powerUpDuration = 2.0f;
+    public bool canRespawn = true;
     private Vector3 rotation = new Vector3(0, 50, 0);
 
     void Start()
