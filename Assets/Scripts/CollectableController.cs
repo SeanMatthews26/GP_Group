@@ -14,11 +14,16 @@ public class CollectableController : MonoBehaviour
 {
     public CollectableType collectableType = new CollectableType();
     public float powerUpDuration = 2.0f;
-    public bool canRespawn = true;
+    private Vector3 rotation = new Vector3(0, 50, 0);
 
     void Start()
     {
 
+    }
+
+    private void Update()
+    {
+        Rotate();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -47,5 +52,10 @@ public class CollectableController : MonoBehaviour
     public void Reset()
     {
         gameObject.active = true;
+    }
+
+    private void Rotate()
+    {
+        transform.Rotate(rotation * Time.deltaTime);
     }
 }
