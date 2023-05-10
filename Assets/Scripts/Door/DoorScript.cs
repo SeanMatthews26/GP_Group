@@ -7,6 +7,7 @@ public class DoorScript : MonoBehaviour
 {
     // private
     public bool opening;
+    public int requiredSwitches;
 
     private void Update()
     {
