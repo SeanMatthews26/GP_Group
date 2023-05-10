@@ -129,6 +129,7 @@ public class PlayerControls : MonoBehaviour
 
     private void Awake()
     {
+        health = startingHealth;
         rb = this.GetComponent<Rigidbody>();
         playerActionAsset = new ThirdPersonInput();
 
@@ -417,7 +418,7 @@ public class PlayerControls : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            if (hit.tag == "Target" && hit.gameObject.GetComponent<Renderer>().isVisible)
+            if (hit.tag == "Enemies" && hit.gameObject.GetComponent<Renderer>().isVisible)
             {
                 possibleTarget.Add(hit.gameObject);
             }

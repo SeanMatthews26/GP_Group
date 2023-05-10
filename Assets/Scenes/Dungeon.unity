@@ -1283,7 +1283,7 @@ MonoBehaviour:
   walkPointRange: 3
   TimeBetweenAttacks: 2
   sightRange: 10
-  attackRange: 0
+  attackRange: 5
   playerInSightRange: 1
   playerInAttackRange: 1
   maxHealth: 1
@@ -5060,7 +5060,7 @@ PrefabInstance:
       objectReference: {fileID: 428583901}
     - target: {fileID: 1753087155, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: startingHealth
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1753087155, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: enemyLayers.m_Bits
