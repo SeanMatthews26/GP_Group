@@ -7,12 +7,19 @@ public class ButtonScript : MonoBehaviour
 {
     // private
     private bool collided;
-
+    public int switchesPressed = 0;
     private GameObject _player;
+    public BoxCollider box;
+    private DoorScript doorScript;
+
+    [SerializeField] GameObject door;
+    [SerializeField] GameObject door2;
 
     private void Awake()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
+        box = this.GetComponent<BoxCollider>();
+        doorScript = door.GetComponent<DoorScript>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,8 +44,15 @@ public class ButtonScript : MonoBehaviour
         {
             if (_player.GetComponent<PlayerControls>().interacting)
             {
-                GameObject door = GameObject.FindGameObjectWithTag("Door");
-                door.GetComponent<doorScript>().StartOpening();
+                switchesPressed++;
+                box.enabled = false;
+                //GameObject door = GameObject.FindGameObjectWithTag("Door");
+                if (switchesPressed >= doorScript.requiredSwitches)
+                {
+                    Debug.Log("hello");
+                    door.GetComponent<DoorScript>().opening = true;
+                    door2.GetComponent<DoorScript>().opening = true;
+                }                
             }
         }
     }

@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Collide
   - Floor
+  - Spline Player Anchor
+  - Spline
+  - Interaction Collider
+  - Door
+  - Switch
+  - Enemies
   layers:
   - Default
   - TransparentFX
@@ -14,7 +20,7 @@ TagManager:
   - Water
   - UI
   - scenario
-  - 
+  - enemy
   - 
   - 
   - 

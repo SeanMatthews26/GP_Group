@@ -35,6 +35,10 @@ public class PlayerControls : MonoBehaviour
     //Attack
     [Header("---Attack---")]
     [SerializeField] public GameObject sword;
+    public Transform attackPoint;
+    public LayerMask enemyLayers;
+    public int attackDamage = 40;
+    public float attackRange = 0.5f;
 
 
     //Jump
@@ -47,6 +51,8 @@ public class PlayerControls : MonoBehaviour
     //Camera
     [Header("---Camera---")]
     [SerializeField] public Camera playerCam;
+    public Camera mainCam;
+    public Camera splineCam;
     [HideInInspector] public bool camEnabled = true;
     private float pitch;
     private float yaw;
@@ -119,6 +125,7 @@ public class PlayerControls : MonoBehaviour
     [Header("---Collectables---")]
     [SerializeField] GameObject CoinCount;
     private int coins = 0;
+    private int keys = 0;
     private bool jumpBoosted = false;
     private bool speedBoosted = false;
 
@@ -130,6 +137,8 @@ public class PlayerControls : MonoBehaviour
         //turn off particles
         speedBoostParticles.Stop();
         extraJumpParticles.Stop();
+
+        playerCam = mainCam;
     }
 
     private void Start()
@@ -174,26 +183,16 @@ public class PlayerControls : MonoBehaviour
 
     private void DoInteract(InputAction.CallbackContext obj)
     {
-        if (!interacting)
-        {
-            bool switchInArea = false;
-            Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * interactSphereOffset, interactSphereRad);
+        interacting = true;
+        Invoke(nameof(ResetInteract), 1f);
+    }
 
-            foreach (Collider hit in hits)
-            {
-                if (hit.tag == "Switch")
-                {
-                    switchInArea = true;
-                    //hit.GetComponent<DoorSwitch>().Switch();
-                }
-            }
+    private void ResetInteract()
 
-            if (switchInArea)
-            {
-                interactPressed = true;
-                interacting = true;
-            }
-        }
+    {
+
+        interacting = false;
+
     }
 
     private bool IsGrounded()
@@ -306,7 +305,7 @@ public class PlayerControls : MonoBehaviour
     private void DoAttack(InputAction.CallbackContext obj)
     {
         if(attacking)
-        {
+        {   
             return;
         }
         attackPressed = true;
@@ -315,7 +314,14 @@ public class PlayerControls : MonoBehaviour
 
     private void Attacking()
     {
-
+        //enemy detection
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+        //damage
+        foreach (Collider enemy in hitEnemies) 
+        {
+          enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); 
+        }
+        Debug.Log("has been done");
     }
 
     private void DoLockOn(InputAction.CallbackContext obj)
@@ -483,6 +489,9 @@ public class PlayerControls : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
+        if (attackPoint == null)
+            return;
+        Gizmos.DrawSphere(attackPoint.position,attackRange);
 
         //LockOn Sphere
         //Gizmos.DrawWireSphere(transform.position + transform.forward * lockOnSphereOffset, lockOnSphereRad);
@@ -539,10 +548,10 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damage)
     {
         invincible = true;
-        health--;
+        health-= damage;
         Invoke(nameof(ResetInvincible), 2f);
         CheckHealth();
         UpdateHealthbar();
@@ -594,6 +603,10 @@ public class PlayerControls : MonoBehaviour
             case CollectableType.heart:
                 health++;
                 break;
+
+            case CollectableType.key:
+                keys++;
+                break;
         }
     }
 
@@ -613,6 +626,9 @@ public class PlayerControls : MonoBehaviour
                 break;
 
             case CollectableType.heart:
+                break;
+
+            case CollectableType.key:
                 break;
         }
     }

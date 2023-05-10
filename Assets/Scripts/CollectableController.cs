@@ -7,7 +7,8 @@ public enum CollectableType
     coin,
     doubleJump,
     speedBoost,
-    heart
+    heart,
+    key
 }
 
 public class CollectableController : MonoBehaviour
