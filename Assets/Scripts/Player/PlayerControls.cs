@@ -50,6 +50,8 @@ public class PlayerControls : MonoBehaviour
     //Camera
     [Header("---Camera---")]
     [SerializeField] public Camera playerCam;
+    public Camera mainCam;
+    public Camera splineCam;
     [HideInInspector] public bool camEnabled = true;
     private float pitch;
     private float yaw;
@@ -133,6 +135,8 @@ public class PlayerControls : MonoBehaviour
         //turn off particles
         speedBoostParticles.Stop();
         extraJumpParticles.Stop();
+
+        playerCam = mainCam;
     }
 
     private void Start()
@@ -181,9 +185,9 @@ public class PlayerControls : MonoBehaviour
         Invoke(nameof(ResetInteract), 1f);
     }
 
-    private void ResetInteract()
-    {
-        interacting = false;
+    private void ResetInteract()
+    {
+        interacting = false;
     }
 
     private bool IsGrounded()
@@ -301,7 +305,10 @@ public class PlayerControls : MonoBehaviour
         //enemy detection
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
         //damage
-        foreach (Collider enemy in hitEnemies) { enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); }
+        foreach (Collider enemy in hitEnemies) 
+        {
+          enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); 
+        }
         Debug.Log("has been done");
     }
 
@@ -464,6 +471,9 @@ public class PlayerControls : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
+        if (attackPoint == null)
+            return;
+        Gizmos.DrawSphere(attackPoint.position,attackRange);
 
         //LockOn Sphere
         //Gizmos.DrawWireSphere(transform.position + transform.forward * lockOnSphereOffset, lockOnSphereRad);
