@@ -14,6 +14,7 @@ public class CollectableController : MonoBehaviour
 {
     public CollectableType collectableType = new CollectableType();
     public float powerUpDuration = 2.0f;
+    public bool canRespawn = true;
 
     void Start()
     {
@@ -29,14 +30,17 @@ public class CollectableController : MonoBehaviour
             gameObject.active = false;
 
             //Pass power up type into PlayerControls
-            other.GetComponent<PlayerControls>().ReceiveCollectable(collectableType, powerUpDuration);
+            other.GetComponent<PlayerControls>().ReceiveCollectable(collectableType);
             other.GetComponent<PlayerControls>().EndPower(collectableType, powerUpDuration);
 
             //Disable powerup
             //this.GetComponent<BoxCollider>().enabled = false;
             //this.GetComponent<MeshRenderer>().enabled = false;
 
-            Invoke(nameof(Reset),powerUpDuration);
+            if (canRespawn)
+            {
+                Invoke(nameof(Reset), powerUpDuration);
+            }
         }
     }
 

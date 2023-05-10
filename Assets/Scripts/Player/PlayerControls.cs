@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem.HID;
+using TMPro;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -115,11 +116,11 @@ public class PlayerControls : MonoBehaviour
     public bool inputBlocked;
 
     //Collectables
+    [Header("---Collectables---")]
+    [SerializeField] GameObject CoinCount;
     private int coins = 0;
     private bool jumpBoosted = false;
-    private float doubleJumpTimer = 0f;
     private bool speedBoosted = false;
-    private float speedBoostTimer = 0f;
 
     private void Awake()
     {
@@ -554,17 +555,17 @@ public class PlayerControls : MonoBehaviour
     }
 
     //---Collectables---
-    public void ReceiveCollectable(CollectableType collectableType, float powerUpDuration)
+    public void ReceiveCollectable(CollectableType collectableType)
     {
         switch (collectableType)
         {
             case CollectableType.coin:
                 ++coins;
+                CoinCount.GetComponent<TMP_Text>().text = coins.ToString();
                 break;
 
             case CollectableType.doubleJump:
                 jumpBoosted = true;
-                doubleJumpTimer = powerUpDuration;
                 extraJumpParticles.Play();
 
                 ++extraJumps;
@@ -572,7 +573,6 @@ public class PlayerControls : MonoBehaviour
 
             case CollectableType.speedBoost:
                 speedBoosted = true;
-                speedBoostTimer = powerUpDuration;
                 speedBoostParticles.Play();
 
                 boostedMaxSpeed = maxSpeed * 2;
@@ -615,44 +615,5 @@ public class PlayerControls : MonoBehaviour
     {
         speedBoosted = false;
         speedBoostParticles.Stop();
-    }
-
-    private void PowerUpCountdown()
-    {
-
-        //-Double jump-
-        if (jumpBoosted)
-        {
-            //Reduce timer
-            if (doubleJumpTimer > 0)
-            {
-                doubleJumpTimer -= Time.deltaTime;
-            }
-            //Disable double jump
-            else
-            {
-                doubleJumpTimer = 0;
-                jumpBoosted = false;
-
-                --extraJumps;
-            }
-        }
-        //-Speed boost-
-        if (speedBoosted)
-        {
-            //Reduce timer
-            if (speedBoostTimer > 0)
-            {
-                speedBoostTimer -= Time.deltaTime;
-            }
-            //Disable double jump
-            else
-            {
-                speedBoostTimer = 0;
-                speedBoosted = false;
-
-                boostedMaxSpeed = maxSpeed / 2;
-            }
-        }
     }
 }

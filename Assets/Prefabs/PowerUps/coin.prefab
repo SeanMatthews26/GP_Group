@@ -230,6 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collectableType: 0
   powerUpDuration: 10
+  canRespawn: 0
 --- !u!1 &5139423782276830770
 GameObject:
   m_ObjectHideFlags: 0
