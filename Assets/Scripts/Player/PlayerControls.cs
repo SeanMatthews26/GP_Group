@@ -314,7 +314,10 @@ public class PlayerControls : MonoBehaviour
         //enemy detection
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
         //damage
-        foreach (Collider enemy in hitEnemies) { enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); }
+        foreach (Collider enemy in hitEnemies) 
+        {
+          enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); 
+        }
         Debug.Log("has been done");
     }
 
@@ -477,6 +480,9 @@ public class PlayerControls : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
+        if (attackPoint == null)
+            return;
+        Gizmos.DrawSphere(attackPoint.position,attackRange);
 
         //LockOn Sphere
         //Gizmos.DrawWireSphere(transform.position + transform.forward * lockOnSphereOffset, lockOnSphereRad);
