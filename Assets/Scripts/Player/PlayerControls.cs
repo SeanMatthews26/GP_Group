@@ -34,6 +34,10 @@ public class PlayerControls : MonoBehaviour
     //Attack
     [Header("---Attack---")]
     [SerializeField] public GameObject sword;
+    public Transform attackPoint;
+    public LayerMask enemyLayers;
+    public int attackDamage = 40;
+    public float attackRange = 0.5f;
 
 
     //Jump
@@ -298,7 +302,7 @@ public class PlayerControls : MonoBehaviour
     private void DoAttack(InputAction.CallbackContext obj)
     {
         if(attacking)
-        {
+        {   
             return;
         }
         attackPressed = true;
@@ -307,7 +311,11 @@ public class PlayerControls : MonoBehaviour
 
     private void Attacking()
     {
-
+        //enemy detection
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+        //damage
+        foreach (Collider enemy in hitEnemies) { enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); }
+        Debug.Log("has been done");
     }
 
     private void DoLockOn(InputAction.CallbackContext obj)
