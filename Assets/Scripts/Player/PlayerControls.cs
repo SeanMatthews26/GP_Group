@@ -100,8 +100,11 @@ public class PlayerControls : MonoBehaviour
 
     //Health/Damage
     [Header("---Health/Damage---")]
-    [SerializeField] int health;
+    [SerializeField] float startingHealth;
+    private float health;
     public bool invincible = false;
+    [SerializeField] Image healthBar;
+    Vector3 startingPos;
 
     //Particles
     [Header("---Particles---")]
@@ -170,7 +173,26 @@ public class PlayerControls : MonoBehaviour
 
     private void DoInteract(InputAction.CallbackContext obj)
     {
-        
+        if (!interacting)
+        {
+            bool switchInArea = false;
+            Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * interactSphereOffset, interactSphereRad);
+
+            foreach (Collider hit in hits)
+            {
+                if (hit.tag == "Switch")
+                {
+                    switchInArea = true;
+                    //hit.GetComponent<DoorSwitch>().Switch();
+                }
+            }
+
+            if (switchInArea)
+            {
+                interactPressed = true;
+                interacting = true;
+            }
+        }
     }
 
     private bool IsGrounded()
@@ -508,6 +530,22 @@ public class PlayerControls : MonoBehaviour
         invincible = true;
         health--;
         Invoke(nameof(ResetInvincible), 2f);
+        CheckHealth();
+        UpdateHealthbar();
+    }
+
+    private void UpdateHealthbar()
+    {
+        healthBar.fillAmount = health / startingHealth;
+    }
+
+    private void CheckHealth()
+    {
+        if (health <= 0)
+        {
+            transform.position = startingPos;
+            health = startingHealth;
+        }
     }
 
     void ResetInvincible()
