@@ -7401,7 +7401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6796439526535375035, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 129.39
+      value: 135.3
       objectReference: {fileID: 0}
     - target: {fileID: 6796439526535375035, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_LocalPosition.y
@@ -7409,7 +7409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6796439526535375035, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 324.2
+      value: 318.3
       objectReference: {fileID: 0}
     - target: {fileID: 6796439526535375035, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7441,7 +7441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6796439526535804059, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_Name
-      value: RPG-Character Variant
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects:
@@ -12834,9 +12834,9 @@ GameObject:
   - component: {fileID: 1356206581}
   - component: {fileID: 1356206580}
   - component: {fileID: 1356206579}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
