@@ -5294,13 +5294,21 @@ PrefabInstance:
       propertyPath: targetImage
       value: 
       objectReference: {fileID: 542144830}
+    - target: {fileID: 1753087155, guid: b95a45fd70886e64294baa66738986ff, type: 3}
+      propertyPath: extraJumpParticles
+      value: 
+      objectReference: {fileID: 1154934016}
+    - target: {fileID: 1753087155, guid: b95a45fd70886e64294baa66738986ff, type: 3}
+      propertyPath: speedBoostParticles
+      value: 
+      objectReference: {fileID: 608886849}
     - target: {fileID: 208429865490905853, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6796439526535375035, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6796439526535375035, guid: b95a45fd70886e64294baa66738986ff, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10245,7 +10253,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1733909837
 GameObject:

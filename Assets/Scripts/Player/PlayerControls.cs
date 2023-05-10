@@ -64,8 +64,6 @@ public class PlayerControls : MonoBehaviour
     Vector3 cameraDirection;
     Vector2 cameraDistanceMinMax;
 
-
-
     //Animation
     [HideInInspector] public bool attackPressed = false;
     [HideInInspector] public bool attacking = false;
@@ -104,7 +102,12 @@ public class PlayerControls : MonoBehaviour
     [Header("---Health/Damage---")]
     [SerializeField] int health;
     public bool invincible = false;
-    
+
+    //Particles
+    [Header("---Particles---")]
+    [SerializeField] public ParticleSystem speedBoostParticles;
+    [SerializeField] public ParticleSystem extraJumpParticles;
+
     // block input
     public bool inputBlocked;
 
@@ -119,7 +122,10 @@ public class PlayerControls : MonoBehaviour
     {
         rb = this.GetComponent<Rigidbody>();
         playerActionAsset = new ThirdPersonInput();
-        
+
+        //turn off particles
+        speedBoostParticles.Stop();
+        extraJumpParticles.Stop();
     }
 
     private void Start()
