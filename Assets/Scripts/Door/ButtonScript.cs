@@ -48,6 +48,7 @@ public class ButtonScript : MonoBehaviour
                 //GameObject door = GameObject.FindGameObjectWithTag("Door");
                 if (switchesPressed >= doorScript.requiredSwitches)
                 {
+                    Debug.Log("hello");
                     door.GetComponent<DoorScript>().opening = true;
                 }                
             }
