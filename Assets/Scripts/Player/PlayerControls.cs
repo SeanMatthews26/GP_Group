@@ -111,7 +111,7 @@ public class PlayerControls : MonoBehaviour
     private float health;
     public bool invincible = false;
     [SerializeField] Image healthBar;
-    Vector3 startingPos;
+    public Vector3 startingPos;
 
     //Particles
     [Header("---Particles---")]
@@ -131,6 +131,7 @@ public class PlayerControls : MonoBehaviour
 
     private void Awake()
     {
+        health = startingHealth;
         rb = this.GetComponent<Rigidbody>();
         playerActionAsset = new ThirdPersonInput();
 
@@ -146,6 +147,7 @@ public class PlayerControls : MonoBehaviour
         cameraDirection = transform.localPosition.normalized;
         cameraDistanceMinMax = new Vector2(0.5f, 12);
 
+        startingPos = transform.position;
     }
 
     private void OnEnable()
@@ -310,18 +312,22 @@ public class PlayerControls : MonoBehaviour
         }
         attackPressed = true;
         attacking = true;
+
+        Attacking();
     }
 
     private void Attacking()
     {
+        Debug.Log("called");
         //enemy detection
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+        Debug.Log(hitEnemies[0]);
         //damage
         foreach (Collider enemy in hitEnemies) 
         {
           enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); 
         }
-        Debug.Log("has been done");
+       
     }
 
     private void DoLockOn(InputAction.CallbackContext obj)
@@ -431,7 +437,7 @@ public class PlayerControls : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            if (hit.tag == "Target" && hit.gameObject.GetComponent<Renderer>().isVisible)
+            if (hit.tag == "Enemies" && hit.gameObject.GetComponent<Renderer>().isVisible)
             {
                 possibleTarget.Add(hit.gameObject);
             }

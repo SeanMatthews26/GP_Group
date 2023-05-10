@@ -30,9 +30,4 @@ public class SplineTrigger : MonoBehaviour
             controls.camEnabled = true;
         }
     }
-
-    private void Update()
-    {
-        Debug.Log(triggered);
-    }
 }

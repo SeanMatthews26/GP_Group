@@ -23,7 +23,7 @@ public class Enemybehaviour : MonoBehaviour
     public int maxHealth = 100;
     int currentHealth;
     public int enemyCount = 3;
-    public int enemyDamage = 20;
+    public int enemyDamage = 5;
     public float xAgent;
     public float zAgent;
     private void Start()
@@ -76,6 +76,11 @@ public class Enemybehaviour : MonoBehaviour
     }
     private void AttackEnemy() 
     {
+        if(Player.GetComponent<PlayerControls>().invincible)
+        {
+            return;
+        }
+
         if(playerInAttackRange)
         Player.GetComponent<PlayerControls>().TakeDamage(enemyDamage);
     }
@@ -90,7 +95,7 @@ public class Enemybehaviour : MonoBehaviour
         {
             //attack code
             AttackEnemy();
-
+            Debug.Log("get reckt");
             alreadyattacked = true;
             Invoke(nameof(ResetAttack), TimeBetweenAttacks);
         }
@@ -103,15 +108,12 @@ public class Enemybehaviour : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log("DAMAGEEEEE");
         //hurt animation
 
         if (currentHealth <= 0) StartCoroutine(EnemySpawm()); Invoke(nameof(DestroyEnemy), 0.5f);
     }
     private void DestroyEnemy()
     {
-
-        Debug.Log("Enemy dies!");
         Destroy(gameObject);
 
     }
