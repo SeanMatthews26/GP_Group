@@ -23,7 +23,7 @@ public class Enemybehaviour : MonoBehaviour
     public int maxHealth = 100;
     int currentHealth;
     public int enemyCount = 3;
-    public int enemyDamage = 20;
+    public int enemyDamage = 5;
     public float xAgent;
     public float zAgent;
     private void Start()
@@ -76,6 +76,11 @@ public class Enemybehaviour : MonoBehaviour
     }
     private void AttackEnemy() 
     {
+        if(Player.GetComponent<PlayerControls>().invincible)
+        {
+            return;
+        }
+
         if(playerInAttackRange)
         Player.GetComponent<PlayerControls>().TakeDamage(enemyDamage);
     }
