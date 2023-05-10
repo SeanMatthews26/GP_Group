@@ -424,25 +424,17 @@ public class PlayerControls : MonoBehaviour
             {
                 return;
             }
-            else
+
+            if (hit[0].collider.isTrigger)
             {
-                //Debug.Log("Blocked");
-                camDistance = Mathf.Clamp(hit[0].distance * 0.8f, cameraDistanceMinMax.x, cameraDistanceMinMax.y);
-                playerCam.transform.position = transform.position + (camDir * camDistance);
-                playerCam.transform.forward = playerToCamDirection;
+                return;
             }
+
+            //Debug.Log("Blocked");
+            camDistance = Mathf.Clamp(hit[0].distance * 0.8f, cameraDistanceMinMax.x, cameraDistanceMinMax.y);
+            playerCam.transform.position = transform.position + (camDir * camDistance);
+            playerCam.transform.forward = playerToCamDirection;
         }
-
-
-
-        /*if (hits[0].collider.gameObject.tag != "MainCamera")
-        {
-            camDistance = Mathf.Clamp(hits[0].distance * 0.8f, cameraDistanceMinMax.x, cameraDistanceMinMax.y);
-        }
-        else
-        {
-            camDistance = cameraDistanceMinMax.y;
-        }*/
     }
 
     private void OnDrawGizmos()
