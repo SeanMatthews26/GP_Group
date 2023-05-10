@@ -50,6 +50,8 @@ public class PlayerControls : MonoBehaviour
     //Camera
     [Header("---Camera---")]
     [SerializeField] public Camera playerCam;
+    public Camera mainCam;
+    public Camera splineCam;
     [HideInInspector] public bool camEnabled = true;
     private float pitch;
     private float yaw;
@@ -133,6 +135,8 @@ public class PlayerControls : MonoBehaviour
         //turn off particles
         speedBoostParticles.Stop();
         extraJumpParticles.Stop();
+
+        playerCam = mainCam;
     }
 
     private void Start()
