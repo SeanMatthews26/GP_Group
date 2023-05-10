@@ -565,6 +565,7 @@ public class PlayerControls : MonoBehaviour
             case CollectableType.doubleJump:
                 jumpBoosted = true;
                 doubleJumpTimer = powerUpDuration;
+                extraJumpParticles.Play();
 
                 ++extraJumps;
                 break;
@@ -572,14 +573,53 @@ public class PlayerControls : MonoBehaviour
             case CollectableType.speedBoost:
                 speedBoosted = true;
                 speedBoostTimer = powerUpDuration;
+                speedBoostParticles.Play();
 
                 boostedMaxSpeed = maxSpeed * 2;
+                break;
+
+            case CollectableType.heart:
+                health++;
                 break;
         }
     }
 
+    public void EndPower(CollectableType cType, float pd)
+    {
+        switch (cType)
+        {
+            case CollectableType.coin:
+                break;
+
+            case CollectableType.doubleJump:
+                Invoke(nameof(PowerDownJump), pd);
+                break;
+
+            case CollectableType.speedBoost:
+                Invoke(nameof(PowerDownSpeed), pd);
+                break;
+
+            case CollectableType.heart:
+                break;
+        }
+    }
+
+    private void PowerDownJump()
+    {
+        jumpBoosted = false;
+        extraJumpParticles.Stop();
+        extraJumps--;
+    }
+
+    private void PowerDownSpeed()
+    {
+        speedBoosted = false;
+        speedBoostParticles.Stop();
+    }
+
     private void PowerUpCountdown()
     {
+
         //-Double jump-
         if (jumpBoosted)
         {
