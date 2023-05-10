@@ -97,6 +97,7 @@ public class Enemybehaviour : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        Debug.Log("DAMAGEEEEE");
         //hurt animation
 
         if (currentHealth <= 0) StartCoroutine(EnemySpawm()); Invoke(nameof(DestroyEnemy), 0.5f);
