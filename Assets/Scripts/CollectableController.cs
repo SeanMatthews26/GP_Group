@@ -6,7 +6,8 @@ public enum CollectableType
 {
     coin,
     doubleJump,
-    speedBoost
+    speedBoost,
+    heart
 }
 
 public class CollectableController : MonoBehaviour
@@ -16,6 +17,8 @@ public class CollectableController : MonoBehaviour
 
     void Start()
     {
+        mesh = GetComponent<Mesh>();
+
         //Check power up to use
         switch (collectableType)
         {
@@ -36,6 +39,9 @@ public class CollectableController : MonoBehaviour
         //Check if it is the player
         if (other.tag == "Player")
         {
+            //Collectable disappears
+            gameObject.active = false;
+
             //Pass power up type into PlayerControls
             other.GetComponent<PlayerControls>().ReceiveCollectable(collectableType, powerUpDuration);
 

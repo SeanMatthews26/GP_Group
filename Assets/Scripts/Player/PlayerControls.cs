@@ -575,6 +575,10 @@ public class PlayerControls : MonoBehaviour
 
                 boostedMaxSpeed = maxSpeed * 2;
                 break;
+
+            case CollectableType.heart:
+                health++;
+                break;
         }
     }
 
