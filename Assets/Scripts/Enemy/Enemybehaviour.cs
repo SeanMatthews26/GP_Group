@@ -23,6 +23,7 @@ public class Enemybehaviour : MonoBehaviour
     public int maxHealth = 100;
     int currentHealth;
     public int enemyCount = 3;
+    public int enemyDamage = 20;
     public float xAgent;
     public float zAgent;
     private void Start()
@@ -73,6 +74,11 @@ public class Enemybehaviour : MonoBehaviour
     {
         agent.SetDestination(Player.position);
     }
+    private void AttackEnemy() 
+    {
+        if(playerInAttackRange)
+        Player.GetComponent<PlayerControls>().TakeDamage(enemyDamage);
+    }
     private void AttackPlayer()
     {
         //enemy not moving
@@ -83,7 +89,7 @@ public class Enemybehaviour : MonoBehaviour
         if (!alreadyattacked)
         {
             //attack code
-
+            AttackEnemy();
 
             alreadyattacked = true;
             Invoke(nameof(ResetAttack), TimeBetweenAttacks);
