@@ -112,8 +112,8 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] public ParticleSystem speedBoostParticles;
     [SerializeField] public ParticleSystem extraJumpParticles;
 
-    // block input
-    public bool inputBlocked;
+    // cutscene
+    public bool inCutscene;
 
     //Collectables
     [Header("---Collectables---")]
@@ -240,46 +240,53 @@ public class PlayerControls : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Movement
-        IsGrounded();
-
-        //new movement
-        Vector2 horizontalVelo;
-        horizontalVelo = Vector2.ClampMagnitude(new Vector2(forceDirection.x, forceDirection.z), maxSpeed);
-        rb.velocity = new Vector3(horizontalVelo.x, rb.velocity.y, horizontalVelo.y);
-
-        //old movement
-        //rb.velocity = Vector3.ClampMagnitude(rb.velocity + forceDirection, maxSpeed); 
-
-        rb.velocity += jumpDirection * Vector3.up;
-
-        //Update current platform velocity
-        if (currentPlat != null)
+        if (!inCutscene)
         {
-            currentPlatVelo = currentPlat.GetComponent<Rigidbody>().velocity;
-        }
+            //Movement
+            IsGrounded();
 
-        if (!onPlatform)
+            //new movement
+            Vector2 horizontalVelo;
+            horizontalVelo = Vector2.ClampMagnitude(new Vector2(forceDirection.x, forceDirection.z), maxSpeed);
+            rb.velocity = new Vector3(horizontalVelo.x, rb.velocity.y, horizontalVelo.y);
+
+            //old movement
+            //rb.velocity = Vector3.ClampMagnitude(rb.velocity + forceDirection, maxSpeed); 
+
+            rb.velocity += jumpDirection * Vector3.up;
+
+            //Update current platform velocity
+            if (currentPlat != null)
+            {
+                currentPlatVelo = currentPlat.GetComponent<Rigidbody>().velocity;
+            }
+
+            if (!onPlatform)
+            {
+                rb.drag = normalDrag;
+            }
+            else
+            {
+                rb.velocity += currentPlatVelo;
+                rb.drag = onPlatDrag;
+            }
+
+            forceDirection = Vector3.zero;
+            jumpDirection = 0;
+
+            //Extra Gravity
+            if(rb.velocity.y < -0.1)
+            {
+                //rb.velocity -= Vector3.down * Physics.gravity.y * Time.fixedDeltaTime * extraGravity;
+                rb.velocity += Vector3.down * extraGravity;
+            }
+
+            LookAt();
+        }
+        else // cutscene
         {
-            rb.drag = normalDrag;
+            HandleCutscene();
         }
-        else
-        {
-            rb.velocity += currentPlatVelo;
-            rb.drag = onPlatDrag;
-        }
-
-        forceDirection = Vector3.zero;
-        jumpDirection = 0;
-
-        //Extra Gravity
-        if(rb.velocity.y < -0.1)
-        {
-            //rb.velocity -= Vector3.down * Physics.gravity.y * Time.fixedDeltaTime * extraGravity;
-            rb.velocity += Vector3.down * extraGravity;
-        }
-
-        LookAt();
     }
 
     private Vector3 GetCameraForward(Camera playerCam)
@@ -340,65 +347,71 @@ public class PlayerControls : MonoBehaviour
 
     private void Update()
     {
-        //Move Input
-        forceDirection += move.ReadValue<Vector2>().x * GetCameraRight(playerCam) * movementSpeed;
-        forceDirection += move.ReadValue<Vector2>().y * GetCameraForward(playerCam) * movementSpeed;
-
-        playerToCamVector = (transform.position + Vector3.up * headToFootDst - playerCam.transform.position);
-        playerToCamDirection = playerToCamVector.normalized;
-
-        //Attack
-        if(attacking)
+        if (!inCutscene)
         {
-            Attacking();
+            //Move Input
+            forceDirection += move.ReadValue<Vector2>().x * GetCameraRight(playerCam) * movementSpeed;
+            forceDirection += move.ReadValue<Vector2>().y * GetCameraForward(playerCam) * movementSpeed;
+
+            playerToCamVector = (transform.position + Vector3.up * headToFootDst - playerCam.transform.position);
+            playerToCamDirection = playerToCamVector.normalized;
+
+            //Attack
+            if(attacking)
+            {
+                Attacking();
+            }
+
+
+            SetSpeed();
         }
-
-
-        SetSpeed();
     }
 
     private void LateUpdate()
     {
-        if(camEnabled)
+        if (!inCutscene)
         {
-            //Camera Stuff
-            if (lockedOn)
+            if(camEnabled)
             {
-                offset2D = transform.position - currentTarget.transform.position;
-                offsetNorm = offset2D.normalized;
+                //Camera Stuff
+                if (lockedOn)
+                {
+                    offset2D = transform.position - currentTarget.transform.position;
+                    offsetNorm = offset2D.normalized;
 
-                targetImage.enabled = true;
-                lockOnCamPos = new Vector3(transform.position.x + (offsetNorm.x * dstToCam2D), playerCam.transform.position.y, transform.position.z + (offsetNorm.z * dstToCam2D));
-                playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, lockOnCamPos, camSwitchSpeed * Time.deltaTime);
+                    targetImage.enabled = true;
+                    lockOnCamPos = new Vector3(transform.position.x + (offsetNorm.x * dstToCam2D), playerCam.transform.position.y, transform.position.z + (offsetNorm.z * dstToCam2D));
+                    playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, lockOnCamPos, camSwitchSpeed * Time.deltaTime);
 
-                var x = Quaternion.LookRotation(currentTarget.transform.position - playerCam.transform.position);
-                playerCam.transform.rotation = Quaternion.Slerp(playerCam.transform.rotation, x, 10 * Time.deltaTime);
+                    var x = Quaternion.LookRotation(currentTarget.transform.position - playerCam.transform.position);
+                    playerCam.transform.rotation = Quaternion.Slerp(playerCam.transform.rotation, x, 10 * Time.deltaTime);
 
-                //LoseTarget();
-                LockOnTarget();
-            }
-            else
-            {
-                targetImage.enabled = false;
-                yaw += look.ReadValue<Vector2>().x * camSensitivity;
-                pitch -= look.ReadValue<Vector2>().y * camSensitivity;
-                pitch = Mathf.Clamp(pitch, pitchLimits.x, pitchLimits.y);
+                    //LoseTarget();
+                    LockOnTarget();
+                }
+                else
+                {
+                    targetImage.enabled = false;
+                    yaw += look.ReadValue<Vector2>().x * camSensitivity;
+                    pitch -= look.ReadValue<Vector2>().y * camSensitivity;
+                    pitch = Mathf.Clamp(pitch, pitchLimits.x, pitchLimits.y);
               
 
-                Vector3 targetRotation = new Vector3(pitch, yaw);
-                playerCam.transform.eulerAngles = targetRotation;
+                    Vector3 targetRotation = new Vector3(pitch, yaw);
+                    playerCam.transform.eulerAngles = targetRotation;
 
-                freeCamPos = transform.position - (playerCam.transform.forward * dstToCam2D) + camTargetAbovePlayer;
+                    freeCamPos = transform.position - (playerCam.transform.forward * dstToCam2D) + camTargetAbovePlayer;
 
-                camVector = freeCamPos - transform.position;
-                camDir = camVector.normalized;
-                camDistance = camVector.magnitude;
+                    camVector = freeCamPos - transform.position;
+                    camDir = camVector.normalized;
+                    camDistance = camVector.magnitude;
 
-                //playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, freeCamPos, camSwitchSpeed * Time.deltaTime);
-                playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, transform.position + (camDir * camDistance), camSwitchSpeed * Time.deltaTime);
+                    //playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, freeCamPos, camSwitchSpeed * Time.deltaTime);
+                    playerCam.transform.position = Vector3.MoveTowards(playerCam.transform.position, transform.position + (camDir * camDistance), camSwitchSpeed * Time.deltaTime);
                 
                 
-                CamOcclusion();
+                    CamOcclusion();
+                }
             }
         }
     }
@@ -615,5 +628,24 @@ public class PlayerControls : MonoBehaviour
     {
         speedBoosted = false;
         speedBoostParticles.Stop();
+    }
+
+    private void HandleCutscene()
+    {
+        Vector3 cameraPreferredPos;
+        Vector3 cameraCurrentPos;
+        
+        GameObject door = GameObject.FindGameObjectWithTag("Door");
+        cameraPreferredPos = door.transform.GetChild(2).gameObject.transform.position;
+        Vector3 cameraPreferredLookAt = door.transform.GetChild(3).gameObject.transform.position;
+
+        cameraCurrentPos = playerCam.transform.position;
+
+        cameraCurrentPos.x = Mathf.Lerp(cameraCurrentPos.x, cameraPreferredPos.x, 0.05f);
+        cameraCurrentPos.y = Mathf.Lerp(cameraCurrentPos.y, cameraPreferredPos.y, 0.05f);
+        cameraCurrentPos.z = Mathf.Lerp(cameraCurrentPos.z, cameraPreferredPos.z, 0.05f);
+
+        playerCam.transform.position = cameraCurrentPos;
+        playerCam.transform.LookAt(cameraPreferredLookAt);
     }
 }

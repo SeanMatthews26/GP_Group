@@ -10,8 +10,6 @@ public class ButtonScript : MonoBehaviour
 
     private GameObject _player;
 
-    [SerializeField] GameObject door;
-
     private void Awake()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
@@ -39,8 +37,8 @@ public class ButtonScript : MonoBehaviour
         {
             if (_player.GetComponent<PlayerControls>().interacting)
             {
-                //GameObject door = GameObject.FindGameObjectWithTag("Door");
-                door.GetComponent<DoorScript>().opening = true;
+                GameObject door = GameObject.FindGameObjectWithTag("Door");
+                door.GetComponent<doorScript>().StartOpening();
             }
         }
     }

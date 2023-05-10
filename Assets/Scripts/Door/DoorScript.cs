@@ -1,14 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorScript : MonoBehaviour
+public class doorScript : MonoBehaviour
 {
     // private
-    public bool opening;
+    private bool opening;
 
-    private void Update()
+
+    void Update()
     {
         Animate();
     }
@@ -19,27 +19,29 @@ public class DoorScript : MonoBehaviour
         {
             GameObject leftPivot = transform.GetChild(0).gameObject;
             GameObject rightPivot = transform.GetChild(1).gameObject;
+            
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-            if ((leftPivot.transform.eulerAngles.y >= 270f) ||
-                (leftPivot.transform.rotation.eulerAngles.y == 0f))
+            if ((leftPivot.transform.localRotation.eulerAngles.y >= 270f) || 
+                (leftPivot.transform.localRotation.eulerAngles.y == 0f))
             {
                 leftPivot.transform.Rotate(0, -9 * Time.deltaTime, 0, Space.Self);
                 rightPivot.transform.Rotate(0, 9 * Time.deltaTime, 0, Space.Self);
+                
+                player.GetComponent<PlayerControls>().inCutscene = true;
             }
+
             else
             {
                 opening = false;
-                
-                // change camera back
-                
+
                 // allow player to give input
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                player.GetComponent<PlayerControls>().inputBlocked = false;
+                player.GetComponent<PlayerControls>().inCutscene = false;
             }
         }
     }
 
-    private void StartOpening()
+    public void StartOpening()
     {
         if (!opening)
         {
