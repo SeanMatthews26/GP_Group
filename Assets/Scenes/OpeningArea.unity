@@ -5519,6 +5519,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button
       objectReference: {fileID: 0}
+    - target: {fileID: 951240529626935522, guid: 4bd4de0c85a98424f851c36138af0209, type: 3}
+      propertyPath: m_TagString
+      value: Switch
+      objectReference: {fileID: 0}
     - target: {fileID: 2045760638066093744, guid: 4bd4de0c85a98424f851c36138af0209, type: 3}
       propertyPath: door
       value: 
