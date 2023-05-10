@@ -2,27 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PowerUpType
+public enum CollectableType
 {
+    coin,
     doubleJump,
     speedBoost
 }
 
-public class PowerUpController : MonoBehaviour
+public class CollectableController : MonoBehaviour
 {
-    public PowerUpType powerUpType = new PowerUpType();
+    public CollectableType collectableType = new CollectableType();
     public float powerUpDuration = 10.0f;
 
     void Start()
     {
         //Check power up to use
-        switch (powerUpType)
+        switch (collectableType)
         {
-            case PowerUpType.doubleJump:
+            case CollectableType.coin:
+                this.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                break;
+            case CollectableType.doubleJump:
                 this.GetComponent<MeshRenderer>().material.color = Color.green;
                 break;
-            case PowerUpType.speedBoost:
-                this.GetComponent<MeshRenderer>().material.color = Color.yellow;
+            case CollectableType.speedBoost:
+                this.GetComponent<MeshRenderer>().material.color = Color.blue;
                 break;
         }
     }
@@ -33,7 +37,7 @@ public class PowerUpController : MonoBehaviour
         if (other.tag == "Player")
         {
             //Pass power up type into PlayerControls
-            other.GetComponent<PlayerControls>().ReceivePowerUp(powerUpType, powerUpDuration);
+            other.GetComponent<PlayerControls>().ReceiveCollectable(collectableType, powerUpDuration);
 
             //Disable powerup
             this.GetComponent<BoxCollider>().enabled = false;

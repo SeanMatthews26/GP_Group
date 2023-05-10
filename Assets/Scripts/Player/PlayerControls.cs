@@ -108,7 +108,8 @@ public class PlayerControls : MonoBehaviour
     // block input
     public bool inputBlocked;
 
-    //Power Ups
+    //Collectables
+    private int coins = 0;
     private bool jumpBoosted = false;
     private float doubleJumpTimer = 0f;
     private bool speedBoosted = false;
@@ -508,18 +509,23 @@ public class PlayerControls : MonoBehaviour
         invincible = false;
     }
 
-    public void ReceivePowerUp(PowerUpType powerUpType, float powerUpDuration)
+    //---Collectables---
+    public void ReceiveCollectable(CollectableType collectableType, float powerUpDuration)
     {
-        switch (powerUpType)
+        switch (collectableType)
         {
-            case PowerUpType.doubleJump:
+            case CollectableType.coin:
+                ++coins;
+                break;
+
+            case CollectableType.doubleJump:
                 jumpBoosted = true;
                 doubleJumpTimer = powerUpDuration;
 
                 ++extraJumps;
                 break;
 
-            case PowerUpType.speedBoost:
+            case CollectableType.speedBoost:
                 speedBoosted = true;
                 speedBoostTimer = powerUpDuration;
 
