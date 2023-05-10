@@ -13,6 +13,7 @@ public class ButtonScript : MonoBehaviour
     private DoorScript doorScript;
 
     [SerializeField] GameObject door;
+    [SerializeField] GameObject door2;
 
     private void Awake()
     {
@@ -50,6 +51,7 @@ public class ButtonScript : MonoBehaviour
                 {
                     Debug.Log("hello");
                     door.GetComponent<DoorScript>().opening = true;
+                    door2.GetComponent<DoorScript>().opening = true;
                 }                
             }
         }
