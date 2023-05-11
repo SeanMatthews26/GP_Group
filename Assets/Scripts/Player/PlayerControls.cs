@@ -437,7 +437,7 @@ public class PlayerControls : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            if (hit.tag == "Enemies" && hit.gameObject.GetComponent<Renderer>().isVisible)
+            if (hit.tag == "Enemies")
             {
                 possibleTarget.Add(hit.gameObject);
             }
