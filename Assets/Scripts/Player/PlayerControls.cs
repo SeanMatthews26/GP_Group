@@ -126,7 +126,7 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] GameObject CoinCount;
     private int coins = 0;
     private int keys = 0;
-    private bool jumpBoosted = false;
+    //private bool jumpBoosted = false;
     private bool speedBoosted = false;
 
     private void Awake()
@@ -318,14 +318,16 @@ public class PlayerControls : MonoBehaviour
 
     private void Attacking()
     {
-        Debug.Log("called");
+        //Debug.Log("called");
         //enemy detection
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
-        Debug.Log(hitEnemies[0]);
         //damage
-        foreach (Collider enemy in hitEnemies) 
+        if (hitEnemies.Length > 0)
         {
-          enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage); 
+            foreach (Collider enemy in hitEnemies)
+            {
+                enemy.GetComponent<Enemybehaviour>().TakeDamage(attackDamage);
+            }
         }
        
     }
@@ -437,7 +439,7 @@ public class PlayerControls : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            if (hit.tag == "Enemies")
+            if (hit.tag == "Enemies" && hit.gameObject.GetComponent<Renderer>().isVisible)
             {
                 possibleTarget.Add(hit.gameObject);
             }
@@ -593,7 +595,7 @@ public class PlayerControls : MonoBehaviour
                 break;
 
             case CollectableType.doubleJump:
-                jumpBoosted = true;
+                //jumpBoosted = true;
                 extraJumpParticles.Play();
 
                 ++extraJumps;
@@ -641,7 +643,7 @@ public class PlayerControls : MonoBehaviour
 
     private void PowerDownJump()
     {
-        jumpBoosted = false;
+        //jumpBoosted = false;
         extraJumpParticles.Stop();
         extraJumps--;
     }

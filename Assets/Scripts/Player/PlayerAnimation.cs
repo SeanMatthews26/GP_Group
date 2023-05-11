@@ -8,7 +8,7 @@ public class PlayerAnimation : MonoBehaviour
 {
     private Animator animator;
     private Rigidbody rb;
-    private float maxSpeed = 5f;
+    //private float maxSpeed = 5f;
     private string currentState;
     PlayerControls playerControls;
     private float playerSpeed;

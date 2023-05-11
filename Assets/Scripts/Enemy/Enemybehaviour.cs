@@ -95,7 +95,7 @@ public class Enemybehaviour : MonoBehaviour
         {
             //attack code
             AttackEnemy();
-            Debug.Log("get reckt");
+            //Debug.Log("get reckt");
             alreadyattacked = true;
             Invoke(nameof(ResetAttack), TimeBetweenAttacks);
         }

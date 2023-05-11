@@ -18,7 +18,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private float pitch;
     private float yaw;
-    private float sensitivity = 10f;
+    //private float sensitivity = 10f;
 
     private void Awake()
     {

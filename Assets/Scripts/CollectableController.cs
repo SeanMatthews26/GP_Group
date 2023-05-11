@@ -34,7 +34,7 @@ public class CollectableController : MonoBehaviour
         if (other.tag == "Player")
         {
             //Collectable disappears
-            gameObject.active = false;
+            gameObject.SetActive(false);
 
             //Pass power up type into PlayerControls
             other.GetComponent<PlayerControls>().ReceiveCollectable(collectableType);
@@ -53,7 +53,7 @@ public class CollectableController : MonoBehaviour
 
     public void Reset()
     {
-        gameObject.active = true;
+        gameObject.SetActive(true);
     }
 
     private void Rotate()
